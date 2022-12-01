@@ -1,0 +1,15 @@
+
+argocd login stage-argocd.tccenter.ru --username USERNAME --sso
+argocd app list -o=name -p='NAMESPACE'
+argocd app delete APPNAME
+argocd app get APPNAME  --refresh 
+argocd app set APPNAME  --sync-policy auto;
+argocd app set APPNAME  --sync-policy none;
+
+
+for i in `argocd app list -o=name -p='tfi-mercury' ` ; do argocd app set $i  --sync-policy auto; done
+for i in `argocd app list -o=name -p='tfi-mercury' ` ; do argocd app set $i  --sync-policy none; done
+
+for i in `argocd app list -o=name -p='tli-collation' --grpc-web ` ; do argocd app delete $i --yes --grpc-web; done
+for i in `argocd app list -o=name -p='tli-collation'  --grpc-web ` ; do argocd.exe app get $i  --refresh --grpc-web; done
+
