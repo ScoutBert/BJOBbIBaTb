@@ -1,0 +1,17 @@
+Доступ tifa-clm-app-lm(1-2).tifa.clm.orglot.office > tifa-clm-db.tifa.clm.orglot.office
+
+Коллеги, добрый день!
+
+Прошу помочь с  доступом tifa-clm-app-lm(1-2).tifa.clm.orglot.office
+
+tifa-clm-app-lm1 collation_esb_import: 20:03:03 15:36:27.680264 [ERR] odb error: 2003 (HY000): Can't connect to MySQL server on 'tifa-clm-db.tifa.clm.orglot.office' (111 "Connection refused")
+
+
+телнет при этом проходит
+
+[asabitov@tifa-clm-app-lm1 ~]$ telnet tifa-clm-db.tifa.clm.orglot.office 3306
+Trying 10.210.19.85...
+Connected to tifa-clm-db.tifa.clm.orglot.office.
+Escape character is '^]'.
+\
+5.5.5-10.4.7-MariaDB-log�lA>Sf(2þaq8^R^d\!-^rmysql_native_passwordConnection closed by foreign host.

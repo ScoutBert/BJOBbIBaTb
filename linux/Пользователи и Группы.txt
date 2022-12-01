@@ -1,0 +1,10 @@
+useradd  -m vasya   - создать юзера vasya с домашней  директорией
+userdel –r vasya     - стереть юзера vasya с его домашней  директорией
+/etc/skel    -  это шаблон домашней директории
+passwd vasya   - изменить пароль для юзера vasya
+
+groupadd Programmers  - создать группу Programmers
+groupdel Programmers  - стереть группу Programmers
+
+usermod –aG Programmers vasya  - добавить юзера vasya в группу Programmers
+deluser vasya Programmers  - удалить юзера vasya  из групы Programmers
