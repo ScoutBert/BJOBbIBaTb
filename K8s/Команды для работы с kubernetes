@@ -1,0 +1,106 @@
+*** Управление кубконфигом
+Получив доступ к namespace (= скачать кубконфиг для тестовых сред: https://stage-k8s-gangway.k8s.orglot.office/ - подробнее см. Доступы в k8s. Выделение namespace и предоставление к ним доступов. ), можно:
+
+0) просмотерть кубконфиг kubectl config view
+
+1) прописать в нем дефолтный namespace:
+
+contexts:
+- context:
+    cluster: stage-k8s
+    namespace: <имя namespace>
+    user: ...
+    name: stage-k8s
+2) можно иметь несколько кубконфигов с дефолтными namespace и в конце каждой команды добавлять  --kubeconfig /home/.../kubeconf*.txt (по дефолту конфиг хранится в ~/.kube/config )
+
+3) можно иметь один кубконфиг и в конце каждой команды добавлять  -n <имя namespace>
+
+4) можно иметь один кубконфиг и, в начале работы в нужном namespace,  переключиться в необходимый namespace  kubectl config set-context --current --namespace=<имя namespace>
+
+*** Просмотр ресурсов 
+Просмотр перечня соответствующих ресурсов выполняется командой get
+
+kubectl get pods
+kubectl get deployments
+kubectl get configmaps
+kubectl get cronjobs
+kubectl get services
+kubectl get secrets
+Добавив в конце -o wide: kubectl get pods -o wide , можно получить более подробную информацию.
+
+
+
+Детальное описание ресурса можно получить, добавив в конце -o yaml: kubectl get pods <имя пода> -o yaml .Также можно сделать kubectl describe pods <имя пода> .Разница между этими командами в представлении данных.
+
+Убрав имя ресурса, получим подробные данные по всем ресурсам, например: kubectl describe pods
+
+*** Просмотр метрик
+kubectl get resourcequotas -o yaml - посмотреть ресурсы системы (почти как ps aux)  -  равно kubectl describe resourcequotas
+kubectl top pod -Показать использование ресурса подов
+
+Потребление памяти модулями в KiB (Кибибайт — единица измерения количества информации равная 2¹⁰ байт. т.е. ровно 100000 байт)
+
+Ресурсы, выделенные поду, выдаются ему из namespace сразу при создании пода.
+
+*** Управление подами
+Выключение подов:
+
+kubectl scale --replicas=0 deployment <имя деплоймента, который разворачивает под> - говорим что количество подов должно быть 0, за счет этого останавливаем работу данного модуля
+
+Включение подов:
+
+kubectl scale --replicas=1 deployment <имя деплоймента, который разворачивает под> - говорим что количество подов должно быть 1, за счет этого возобновляем работу данного модуля. Цифру подставлять равную количеству необходимых инстансов.
+
+
+
+Альтернатива:
+
+kubectl edit deployment <имя деплоймента, который разворачивает под> , изменение значения в параметре replicas
+
+
+
+Рестарт подов:
+
+kubectl rollout restart deployment <имя деплоймента, который разворачивает под> - последовательный рестрат подов (делает это не разом, а последовательно - создает новый под, когда тот готов к приему трафика - выключает старый под и включает новый).
+
+Поведение при рестарте зависит от rolloutUpdtaeStrategy. В целом, как описано выше (при достаточном количестве ресурсов, т.к. ресурсы, выделенные поду, выдаются ему из namespace сразу при создании пода).
+
+*** Версии модулей
+Текущие версии, прописанные в деплойменте (то есть, то, что поднимется при рестарте) 
+
+for i in `kubectl get pods | fgrep -v NAME | cut -f1 -d" " `; do kubectl describe pod $i | fgrep Image: ; done | cut -f3 -d"/"
+
+Версии, прописанные в деплойменте (то есть, то, что поднимется при рестарте) 
+
+for i in `kubectl get deployments | fgrep -v NAME | cut -f1 -d" " `; do kubectl describe deployment $i | fgrep Image: ; done | cut -f3 -d"/"
+for i in `kubectl get cronjobs | fgrep -v NAME | cut -f1 -d" " `; do kubectl describe cronjob $i | fgrep Image: ; done | cut -f3 -d"/"
+
+*** Дебаг внутри пода
+Внутрь пода можно зайти по команде: kubectl -it exec <полное название пода> --/bin/bash (сейчас можно и так: kubectl -it exec <полное название пода> /bin/bash)
+
+Основной процесс пода всегда имеет PID = 1, соответственно дебаг заключается в следующем:
+
+1) pstack 1
+
+ выхлоп в консоли 
+2) strace -T -tt -p 1 -ff -o /tmp/<имя файла>
+
+ выхлоп в файл
+3) strace -T -tt -p 1 -ff  
+
+ выхлоп в консоли 
+4) bash -c '</dev/tcp/127.0.0.1/80 &>/dev/null' - проверка доступности порта 80 по адресу 127.0.0.1
+
+ если порт закрыт, ругнется : "command terminated with exit code 137"
+5) Чтобы посмотреть внутрь падающего пода, надо добавить command: ['/bin/sleep', '3600'] в deployments в секцию conteiners
+
+ под будет живым час
+
+
+
+
+Полезные ссылки:
+
+https://kubernetes.io/ru/docs/reference/kubectl/cheatsheet/
+
+https://kubernetes.io/ru/docs/reference/kubectl/overview/
