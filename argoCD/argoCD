@@ -1,5 +1,7 @@
 
 argocd login stage-argocd.tccenter.ru --username USERNAME --sso
+argocd logout stage-argocd.tccenter.ru
+
 argocd app list -o=name -p='NAMESPACE'
 argocd app delete APPNAME
 argocd app get APPNAME  --refresh 
