@@ -1,0 +1,1 @@
+openssl s_client prod-mercury-wave.russian-lotteries.net:443
