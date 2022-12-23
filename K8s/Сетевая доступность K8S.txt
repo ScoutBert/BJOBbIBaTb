@@ -5,3 +5,9 @@ curl -v telnet://orglot.office:445
 *   Trying 10.200.2.100...
 * TCP_NODELAY set
 * Connected to orglot.office (10.200.2.100) port 445 (#0)
+
+
+[root@stage-k8s-board-ilb3 ~]# cat < /dev/tcp/10.230.16.1/443 ; echo $?
+-bash: connect: Connection refused
+-bash: /dev/tcp/10.230.16.1/443: Connection refused
+1

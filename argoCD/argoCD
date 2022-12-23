@@ -15,3 +15,6 @@ for i in `argocd app list -o=name -p='namespace' ` ; do argocd app set $i  --syn
 for i in `argocd app list -o=name -p='namespace' --grpc-web ` ; do argocd app delete $i --yes --grpc-web; done
 for i in `argocd app list -o=name -p='namespace'  --grpc-web ` ; do argocd.exe app get $i  --refresh --grpc-web; done
 
+
+Логи
+ log-cat /var/log/remote/by-namespace/argocd/*.log_22:12:23_15* |grep '14\:29\:*' |  grep dev-fnsrs | sort -k4
