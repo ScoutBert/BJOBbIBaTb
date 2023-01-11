@@ -14,3 +14,4 @@ app_bin_send_request_count {namespace=~"prod-mercury",pod=~"prod-transaction-man
 sum by (namespace)(rate (app_bin_send_request_count {namespace=~"prod-mercury",pod=~"prod-transaction-manager.*"}[1m]))
 кол-про продаж 
 sum by (namespace)(rate (app_bin_send_request_count {namespace=~"prod-mercury",pod=~"prod-transaction-manager.*",request=~"endSale", sign=~"0"}[1m]))
+
