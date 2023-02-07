@@ -1,5 +1,11 @@
 
-http://0.0.0.0:3000/metrics Посмотреть метрики из пода curl
+curl http://0.0.0.0:3000/metrics Посмотреть метрики из пода curl
+
+web
+ curl http://localhost:8081/actuator/metrics
+
+
+{namespace=~"tifa-boards"} 
 
 например метрика
 app_bin_send_request_count метрика
