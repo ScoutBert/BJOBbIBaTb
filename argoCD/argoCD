@@ -18,3 +18,11 @@ for i in `argocd app list -o=name -p='namespace'  --grpc-web ` ; do argocd.exe a
 
 Логи
  log-cat /var/log/remote/by-namespace/argocd/*.log_22:12:23_15* |grep '14\:29\:*' |  grep dev-fnsrs | sort -k4
+
+check notifications
+log-cat /var/log/remote/by-namespace/argocd/*.log_23:03:31_18* | grep dev-merc-tickets-db | grep notifications-controller
+
+
+Initialized new operation
+
+log-cat /var/log/remote/by-namespace/argocd/*.log_23:04:05_01* | grep application-controller|  grep tfi-merc-corrections-gate | sort -k4

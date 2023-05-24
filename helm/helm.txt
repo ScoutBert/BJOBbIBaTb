@@ -1,0 +1,4 @@
+Локальный запуск чарта
+
+cd ~/Downloads/Stoloto; helm package chart; mv ~/Downloads/Stoloto/base-1.6.89.tgz ~/Downloads/Stoloto/supro-deploy/supro-ingress/charts/; cd ~/Downloads/Stoloto/supro-deploy/supro-ingress/; helm template . --dry-run -f ../env_values/tli/values.yaml -f configs.yaml -f secrets.yaml -f module_version.yaml --kubeconfig ~/.kube/kubeconfig -n dev-test --debug
+
